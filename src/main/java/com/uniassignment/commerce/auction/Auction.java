@@ -3,21 +3,22 @@ package com.uniassignment.commerce.auction;
 import com.uniassignment.commerce.user.User;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "auctions")
 public class Auction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 32)
+    @Column(length = 32, nullable = false)
     private String title;
-    @Column(precision = 10, scale = 2)
-    private Double initial_bid;
+    @Column(precision = 10, scale = 2, nullable = false)
+    private BigDecimal initialBid;
     private String description;
     private String category;
-    private String picture =
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png";
-    private Boolean active = false;
+    private String picture;
+    private Boolean active = true;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -25,13 +26,12 @@ public class Auction {
     public Auction() {
 
     }
-    public Auction(String title, Double initial_bid, String description, String category, String picture, Boolean active, User user) {
+    public Auction(String title, BigDecimal initialBid, String description, String category, String picture, User user) {
         this.title = title;
-        this.initial_bid = initial_bid;
+        this.initialBid = initialBid;
         this.description = description;
         this.category = category;
         this.picture = picture;
-        this.active = active;
         this.user = user;
     }
 
@@ -47,12 +47,12 @@ public class Auction {
         this.title = title;
     }
 
-    public Double getInitial_bid() {
-        return initial_bid;
+    public BigDecimal getInitialBid() {
+        return initialBid;
     }
 
-    public void setInitial_bid(Double initial_bid) {
-        this.initial_bid = initial_bid;
+    public void setInitialBid(BigDecimal initial_bid) {
+        this.initialBid = initial_bid;
     }
 
     public String getDescription() {
@@ -100,7 +100,7 @@ public class Auction {
         return "Auction{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", initial_bid=" + initial_bid +
+                ", initial_bid=" + initialBid +
                 '}';
     }
 }

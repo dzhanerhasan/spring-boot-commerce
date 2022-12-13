@@ -16,12 +16,6 @@
     <div class="container-fluid">
 
         <a class="navbar-brand" href="#">Easy Commerce</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="#">Home</a>
@@ -29,71 +23,164 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Watchlist</a>
                 </li>
+                <li class="nav-item">
+                    <button class="nav-link btn" ><span data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                       style="cursor: pointer;">Add Auction</span></button>
+                </li>
             </ul>
 
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Categories
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Auction</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="auction-form">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Title</label>
+                                <input class="form-control" id="title" placeholder="Enter auction title">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="initialBid" class="form-label">Initial Bid</label>
+                                <input class="form-control" id="initialBid" placeholder="Enter initial bid for auction">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" placeholder="Enter auction description"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select name="category" id="category">
+                                    <option value="Other" selected>Other</option>
+                                    <option value="Home">Home</option>
+                                    <option value="Automobiles">Automobiles</option>
+                                    <option value="Toys">Toys</option>
+                                    <option value="Clothes">Clothes</option>
+                                    <option value="Animals">Animals</option>
+                                    <option value="Work">Work</option>
+                                    <option value="Sport">Sport</option>
+                                    <option value="Technology">Technology</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="pictureUrl" class="form-label">Picture URL</label>
+                                <input class="form-control" id="pictureUrl" placeholder="Enter auction picture url">
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Create auction</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <button class="btn btn-danger ms-2">Log out</button>
         </div>
+
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Categories
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+        </div>
+        <button class="btn btn-danger ms-2">Log out</button>
     </div>
 </nav>
 
 <div class="container">
-    <div class="row">
-        <div class="card m-3" style="width: 18rem;">
+    <div class="row" id="auction-list">
+        <div class="card m-3" id="auctionId" style="width: 18rem; display: none">
             <img src="..." class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">Card title</h5>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <button class="btn btn-primary">View Details</button>
             </div>
         </div>
 
-        <div class="card m-3" style="width: 18rem;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-
-        <div class="card m-3" style="width: 18rem;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-
-        <div class="card m-3" style="width: 18rem;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-
-        <div class="card m-3" style="width: 18rem;">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
     </div>
 </div>
 
+<script>
+
+    $("#auction-form").submit((e) => {
+        e.preventDefault();
+
+        $.ajax({
+            url: "auction/create",
+            method: "POST",
+            data: {
+                title: $("#title").val(),
+                initialBid: $("#initialBid").val(),
+                description: $("#description").val(),
+                category: $("#category").val(),
+                pictureUrl: $("#pictureUrl").val()
+            },
+            success: (data) => {
+                window.location.replace("dashboard.html");
+            },
+            fail: () => {
+                alert("There was an error while creating the auction, try again!")
+            }
+        })
+    })
+
+
+    const viewAuctionDetails = (id) => {
+        $.ajax({
+            url: "auction/" + id,
+            method: "GET",
+            complete: (data) => {
+                if(data.status === 200) {
+                    window.location.href = "item.html"
+                }
+            }
+        })
+    }
+
+
+    const addAuction = (picture, title, initialBid, id) => {
+        let newAuction = $("#auctionId").clone();
+
+        newAuction.find("img").attr("src", picture);
+        newAuction.find("h5").text(title)
+        newAuction.find("p").text(initialBid)
+        newAuction.find("button").click(() => {
+            viewAuctionDetails(id);
+        })
+
+        $("#auction-list").prepend(newAuction);
+        newAuction.show();
+    }
+
+    const loadAuctions = () => {
+        $.ajax({
+            url: "/auction/all",
+            method: "GET",
+            success: (data) => {
+                data.forEach((auction) => {
+                    if(auction.active) {
+                        addAuction(auction.picture, auction.title, auction.initialBid, auction.id)
+                    }
+                })
+            }
+        })
+    }
+
+    loadAuctions();
+</script>
 </body>
+
 </html>

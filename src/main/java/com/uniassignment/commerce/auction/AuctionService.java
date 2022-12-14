@@ -4,6 +4,7 @@ import com.uniassignment.commerce.user.User;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface AuctionService {
     List<Auction> getAllAuctions();
@@ -11,4 +12,6 @@ public interface AuctionService {
     Auction createAuction(String title, BigDecimal initialBid,
                           String description, String category,
                           String pictureUrl, User user);
+
+    Auction retrieveAuction(Long id);
 }

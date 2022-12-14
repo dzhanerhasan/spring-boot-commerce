@@ -144,7 +144,7 @@
             method: "GET",
             complete: (data) => {
                 if(data.status === 200) {
-                    window.location.href = "item.html"
+                    window.location.href = "item.html?id=" + id;
                 }
             }
         })
@@ -157,6 +157,7 @@
         newAuction.find("img").attr("src", picture);
         newAuction.find("h5").text(title)
         newAuction.find("p").text(initialBid)
+        newAuction.attr('id', '');
         newAuction.find("button").click(() => {
             viewAuctionDetails(id);
         })

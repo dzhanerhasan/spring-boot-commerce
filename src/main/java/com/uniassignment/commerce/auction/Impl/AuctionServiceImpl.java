@@ -4,11 +4,13 @@ import com.uniassignment.commerce.auction.Auction;
 import com.uniassignment.commerce.auction.AuctionRepository;
 import com.uniassignment.commerce.auction.AuctionService;
 import com.uniassignment.commerce.user.User;
-import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuctionServiceImpl implements AuctionService {
@@ -43,5 +45,11 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = new Auction(title, initialBid, description, category, pictureUrl, user);
 
         return auctionRepository.saveAndFlush(auction);
+    }
+
+    public Auction retrieveAuction(Long id) {
+        Optional<Auction> auction = auctionRepository.findById(id);
+
+        return auction.get();
     }
 }

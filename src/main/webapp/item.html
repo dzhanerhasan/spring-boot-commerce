@@ -16,6 +16,159 @@
     <title>Item Details</title>
 </head>
 <body>
-    
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="#">Easy Commerce</a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Watchlist</a>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link btn" ><span data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                    style="cursor: pointer;">Add Auction</span></button>
+            </li>
+        </ul>
+
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Auction</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="auction-form">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Title</label>
+                                <input class="form-control" id="title" placeholder="Enter auction title">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="initialBid" class="form-label">Initial Bid</label>
+                                <input class="form-control" id="initialBid" placeholder="Enter initial bid for auction">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" placeholder="Enter auction description"></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select name="category" id="category">
+                                    <option value="Other" selected>Other</option>
+                                    <option value="Home">Home</option>
+                                    <option value="Automobiles">Automobiles</option>
+                                    <option value="Toys">Toys</option>
+                                    <option value="Clothes">Clothes</option>
+                                    <option value="Animals">Animals</option>
+                                    <option value="Work">Work</option>
+                                    <option value="Sport">Sport</option>
+                                    <option value="Technology">Technology</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="pictureUrl" class="form-label">Picture URL</label>
+                                <input class="form-control" id="pictureUrl" placeholder="Enter auction picture url">
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Create auction</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Categories
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+        </div>
+        <button class="btn btn-danger ms-2">Log out</button>
+    </div>
+</nav>
+
+<div class="container" id="auction-details">
+    <div class="row mt-5" id="auction" style="display: none">
+        <img src="" alt="Auction Picture" id="auction-picture"
+             class="img-fluid img-thumbnail col">
+
+        <div class="card col ms-3">
+            <div class="row mt-3">
+                <form class="col-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter your bid">
+                        <button class="btn btn-outline-secondary" type="button">Bid</button>
+                    </div>
+                </form>
+                <div class="col-6 text-end mt-2" id="current-bid">Current highest bid: 12.00BGN
+                </div>
+            </div>
+            <hr>
+            <div id="comments" class="overflow-scroll h-75" style="max-height: 50vh; min-height: 50vh;">
+
+            </div>
+            <hr>
+            <form class="w-100 h-25 mb-3">
+                    <input type="text" class="form-control h-50 mb-2" id="comment" placeholder="Post a comment">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="w-100"></div>
+
+        <div class="card w-100 mt-3 mb-5 overflow-scroll" style="height: 150px;">
+            <p id="auction-description" class="mt-2"></p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const loadAuctionDetails = () => {
+        const getParamsFromUrl = new URLSearchParams(window.location.search);
+        let param = getParamsFromUrl.get("id");
+
+        $.ajax({
+            url: "auction/" + param,
+            method: "GET",
+            success: (data) => {
+                let auction = $("#auction").clone();
+
+                let auctionDescription = "No description..."
+
+                console.log(data)
+
+                auction.find("img").attr("src", data.picture);
+                auction.find("#current-bid").text("Current highest bid: " + data.initialBid + " BGN")
+
+                if(data.description) {
+                    auctionDescription = data.description;
+                }
+                auction.find("#auction-description").text(auctionDescription);
+
+                $("#auction-details").append(auction);
+                auction.show();
+            }
+        })
+    }
+
+    loadAuctionDetails();
+</script>
 </body>
 </html>

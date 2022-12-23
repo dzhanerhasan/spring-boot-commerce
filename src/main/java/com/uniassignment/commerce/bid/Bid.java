@@ -1,5 +1,6 @@
 package com.uniassignment.commerce.bid;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.uniassignment.commerce.auction.Auction;
 import com.uniassignment.commerce.user.User;
 import jakarta.persistence.*;
@@ -19,10 +20,12 @@ public class Bid implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "auction_id", nullable = false)
+    @JsonBackReference
     private Auction auction;
 
     private Boolean winner = false;
@@ -70,5 +73,16 @@ public class Bid implements Serializable {
 
     public void setWinner(Boolean winner) {
         this.winner = winner;
+    }
+
+    @Override
+    public String toString() {
+        return "Bid{" +
+                "id=" + id +
+                ", bid=" + bid +
+                ", user=" + user +
+                ", auction=" + auction +
+                ", winner=" + winner +
+                '}';
     }
 }

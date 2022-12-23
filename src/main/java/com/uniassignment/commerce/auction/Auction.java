@@ -1,13 +1,15 @@
 package com.uniassignment.commerce.auction;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.uniassignment.commerce.bid.Bid;
 import com.uniassignment.commerce.user.User;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "auctions")
@@ -27,8 +29,8 @@ public class Auction implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "auction")
-    @JsonIgnore
-    private Set<Bid> bids;
+    @JsonManagedReference
+    private List<Bid> bids;
 
     public Auction() {
 
@@ -102,11 +104,11 @@ public class Auction implements Serializable {
         this.user = user;
     }
 
-    public Set<Bid> getBids() {
+    public List<Bid> getBids() {
         return bids;
     }
 
-    public void setBids(Set<Bid> bids) {
+    public void setBids(List<Bid> bids) {
         this.bids = bids;
     }
 

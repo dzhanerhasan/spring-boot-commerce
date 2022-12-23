@@ -23,9 +23,9 @@ public class BidController {
     }
 
     @PostMapping("/create")
-    public Bid createBid(@RequestParam Long auctionId,
-                         @RequestParam BigDecimal bidValue,
-                         HttpSession session) {
+    public Boolean createBid(@RequestParam Long auctionId,
+                            @RequestParam BigDecimal bidValue,
+                            HttpSession session) {
 
         User user = (User) session.getAttribute("loggedUser");
         Auction auction = auctionService.retrieveAuction(auctionId);

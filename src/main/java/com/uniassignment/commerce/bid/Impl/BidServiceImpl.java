@@ -8,6 +8,7 @@ import com.uniassignment.commerce.user.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class BidServiceImpl implements BidService {
@@ -18,10 +19,20 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public Bid createBid(BigDecimal value, User user, Auction auction) {
+    public Boolean createBid(BigDecimal value, User user, Auction auction) {
 
-        Bid bid = new Bid(value, user, auction);
+        List<Bid> bidsOnAuction = auction.getBids();
 
-        return bidRepository.saveAndFlush(bid);
+//        If there are no bids on the auction, the user's bid must be equal or higher than the initial bid,
+//        subsequent bids must be higher than the previous one.
+
+        if(bidsOnAuction.isEmpty() && (value.compareTo(auction.getInitialBid()) >= 0) ||
+                value.compareTo(bidsOnAuction.get(bidsOnAuction.size() - 1).getBid()) > 0) {
+            Bid bid = new Bid(value, user, auction);
+            bidRepository.saveAndFlush(bid);
+            return true;
+        }
+
+        return false;
     }
 }

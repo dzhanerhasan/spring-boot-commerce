@@ -151,12 +151,21 @@
     }
 
 
-    const addAuction = (picture, title, initialBid, id) => {
+    const addAuction = (picture, title, initialBid, id, bids) => {
         let newAuction = $("#auctionId").clone();
 
         newAuction.find("img").attr("src", picture);
         newAuction.find("h5").text(title)
-        newAuction.find("p").text(initialBid)
+
+        console.log(bids)
+
+        if(!bids.length > 0) {
+            newAuction.find("p").text(initialBid)
+        } else {
+            newAuction.find("p").text(bids[bids.length - 1].bid)
+        }
+
+
         newAuction.attr('id', '');
         newAuction.find("button").click(() => {
             viewAuctionDetails(id);
@@ -173,9 +182,11 @@
             success: (data) => {
                 data.forEach((auction) => {
                     if(auction.active) {
-                        addAuction(auction.picture, auction.title, auction.initialBid, auction.id)
+                        addAuction(auction.picture, auction.title, auction.initialBid, auction.id, auction.bids)
                     }
                 })
+                console.log(data)
+
             }
         })
     }

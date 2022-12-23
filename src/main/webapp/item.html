@@ -178,7 +178,7 @@
                 auction.find("#auction-title").text(data.title)
                 auction.find("img").attr("src", data.picture);
 
-                if(!data.bids) {
+                if(!data.bids.length > 0) {
                     auction.find("#current-bid").text("Current bid: " + data.initialBid + " BGN")
                 } else {
                     auction.find("#current-bid").text("Current bid: "

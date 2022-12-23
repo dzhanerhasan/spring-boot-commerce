@@ -161,8 +161,18 @@
     let param = getParamsFromUrl.get("id");
 
     const closeAuction = (auction) => {
-        auction.active = false;
-        window.location.replace("dashboard.html");
+        $.ajax({
+            url: "auction/close/" + auction.id,
+            method: "POST",
+            success: (data) => {
+                window.location.href = "dashboard.html";
+                console.log(data);
+
+            },
+            fail: () => {
+                alert("Operation failed!")
+            }
+        })
     }
 
     const loadAuctionDetails = () => {
@@ -174,7 +184,6 @@
                 const auctionCopy = $("#auction")
                 let auction = auctionCopy.clone();
                 let auctionDescription = "No description..."
-                let closeAuction = auction.find("#close-auction");
 
                 auction.find("#auction-title").text(data.title)
                 auction.find("img").attr("src", data.picture);
@@ -186,7 +195,7 @@
                         + data.bids[data.bids.length - 1].bid + " BGN by " + data.user.username)
                 }
 
-                closeAuction.click(() => {
+                auction.find("#close-auction").click(() => {
                     closeAuction(data);
                 });
 
@@ -195,14 +204,17 @@
                 }
                 auction.find("#auction-description").text(auctionDescription);
 
-                // Only the user who created the auction can close it.
+
                 $.ajax({
                     url: "requestUser",
                     method: "GET",
-                    success: (userId) => {
-                        if(userId !== data.user.username) {
+                    success: (username) => {
+                        if(username !== data.user.username) {
+                            // Only the user who created the auction can close it (when auction is closed the highest bidder wins
+                            // the auction)
                             closeAuction.hide();
                         } else {
+                            // Users can't bid on their own auctions so the form is hidden.
                             $("#bid-form").hide();
                         }
                     }
@@ -210,7 +222,6 @@
 
                 auctionCopy.remove();
 
-                $("#auction-details").append(auction);
                 $("#auction-details").append(auction);
 
                 // Bid functionality on auctions.
@@ -259,15 +270,17 @@
                 });
 
                 auction.show();
+
+                console.log(data)
             }
-        })
+        });
     }
 
     const checkAuth = () => {
         $.ajax({
             url: "isAuthenticated",
             method: "GET",
-            complete: function(data){
+            complete: (data) => {
                 if(data.status === 401){
                     window.location.href = "index.html";
                 }

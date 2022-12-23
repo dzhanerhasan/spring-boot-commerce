@@ -48,8 +48,18 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     public Auction retrieveAuction(Long id) {
-        Optional<Auction> auction = auctionRepository.findById(id);
 
-        return auction.get();
+        return auctionRepository.findById(id).get();
+    }
+
+    @Override
+    public Auction closeAuction(Long id) {
+
+        Auction auction = auctionRepository.findById(id).get();
+        auction.setActive(false);
+
+        System.out.println(auction);
+
+        return auctionRepository.saveAndFlush(auction);
     }
 }

@@ -40,4 +40,8 @@ public class AuctionController {
         return auctionService.retrieveAuction(id);
     }
 
+    @PostMapping("/close/{id}")
+    public Auction closeAuction(@PathVariable Long id) {
+        return auctionService.closeAuction(id);
+    }
 }

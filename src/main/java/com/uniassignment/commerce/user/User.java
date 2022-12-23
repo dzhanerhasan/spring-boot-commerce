@@ -32,7 +32,7 @@ public class User implements Serializable {
     @JsonIgnore
     private Set<Auction> auctions;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     @JsonManagedReference
     private Set<Bid> bids;
     public User() {

@@ -13,4 +13,6 @@ public interface AuctionService {
                           String pictureUrl, User user);
 
     Auction retrieveAuction(Long id);
+
+    Auction closeAuction(Long id);
 }

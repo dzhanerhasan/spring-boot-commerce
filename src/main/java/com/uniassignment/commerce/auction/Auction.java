@@ -1,13 +1,17 @@
 package com.uniassignment.commerce.auction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.uniassignment.commerce.bid.Bid;
 import com.uniassignment.commerce.user.User;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Table(name = "auctions")
-public class Auction {
+public class Auction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,8 +24,11 @@ public class Auction {
     private String picture;
     private Boolean active = true;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "auction")
+    @JsonIgnore
+    private Set<Bid> bids;
 
     public Auction() {
 
@@ -93,6 +100,14 @@ public class Auction {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(Set<Bid> bids) {
+        this.bids = bids;
     }
 
     @Override

@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class AuctionServiceImpl implements AuctionService {
 
-    private AuctionRepository auctionRepository;
+    private final AuctionRepository auctionRepository;
 
     public AuctionServiceImpl(AuctionRepository auctionRepository) {
         this.auctionRepository = auctionRepository;

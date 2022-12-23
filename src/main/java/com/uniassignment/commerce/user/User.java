@@ -1,5 +1,8 @@
 package com.uniassignment.commerce.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.uniassignment.commerce.auction.Auction;
+import com.uniassignment.commerce.bid.Bid;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -24,7 +27,13 @@ public class User implements Serializable {
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name="role_id"))
     private Set<Role> roles;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    private Set<Auction> auctions;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
+    private Set<Bid> bids;
     public User() {
     }
 
@@ -86,6 +95,22 @@ public class User implements Serializable {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Auction> getAuctions() {
+        return auctions;
+    }
+
+    public void setAuctions(Set<Auction> auctions) {
+        this.auctions = auctions;
+    }
+
+    public Set<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(Set<Bid> bids) {
+        this.bids = bids;
     }
 
     @Override

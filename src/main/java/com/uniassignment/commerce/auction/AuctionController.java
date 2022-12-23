@@ -6,12 +6,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/auction")
 public class AuctionController {
-
     private AuctionService auctionService;
 
     public AuctionController(AuctionService auctionService) {

@@ -91,7 +91,8 @@
 
 
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                 Categories
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -100,7 +101,7 @@
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
         </div>
-        <button class="btn btn-danger ms-2">Log out</button>
+        <button class="btn btn-danger ms-2" id="logout">Log out</button>
     </div>
 </nav>
 
@@ -125,14 +126,14 @@
         <div class="card col ms-3">
             <div class="row mt-3">
 
-                <form class="col-6" id="bid-form">
+                <form class="col" id="bid-form">
                     <div class="input-group">
                         <input id="bid-value" class="form-control" placeholder="Enter your bid">
                         <button class="btn btn-outline-secondary" type="submit">Bid</button>
                     </div>
                 </form>
 
-                <div class="col-6 text-end mt-2" id="current-bid">Current highest bid: 12.00BGN
+                <div class="col text-end mt-2" id="current-bid">Sample
                 </div>
             </div>
             <hr>
@@ -199,14 +200,17 @@
                     url: "requestUser",
                     method: "GET",
                     success: (userId) => {
-                        if(userId !== data.user.id) {
+                        if(userId !== data.user.username) {
                             closeAuction.hide();
+                        } else {
+                            $("#bid-form").hide();
                         }
                     }
                 });
 
                 auctionCopy.remove();
 
+                $("#auction-details").append(auction);
                 $("#auction-details").append(auction);
 
                 // Bid functionality on auctions.
@@ -231,13 +235,19 @@
                                 failAlert.show();
                                 successAlert.hide();
                             } else {
-                                successAlert.text("Your bid was accepted!");
-                                successAlert.show();
-                                failAlert.hide();
 
-                                changeBid.text("Current bid: " + bidValue.val() + " BGN by " + data.user.username)
-                                bidValue.val("");
+                                $.ajax({
+                                    url: "requestUser",
+                                    method: "GET",
+                                    success: (username) => {
+                                        successAlert.text("Your bid was accepted!");
+                                        successAlert.show();
+                                        failAlert.hide();
 
+                                        changeBid.text("Current bid: " + bidValue.val() + " BGN by " + username)
+                                        bidValue.val("");
+                                }
+                                });
                             }
 
                         },
@@ -253,6 +263,35 @@
         })
     }
 
+    const checkAuth = () => {
+        $.ajax({
+            url: "isAuthenticated",
+            method: "GET",
+            complete: function(data){
+                if(data.status === 401){
+                    window.location.href = "index.html";
+                }
+            }
+        });
+    }
+
+    $('#logout').on('click', (e) => {
+        e.preventDefault();
+
+        $.ajax({
+            url: "logout",
+            method: "POST",
+            complete: (data) => {
+                if(data.status === 418){
+                    alert("You are not logged in.");
+                }
+                window.location.href = "index.html";
+            }
+        });
+
+    });
+
+    checkAuth();
     loadAuctionDetails();
 </script>
 </body>

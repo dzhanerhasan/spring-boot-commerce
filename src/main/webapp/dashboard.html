@@ -95,7 +95,7 @@
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
         </div>
-        <button class="btn btn-danger ms-2">Log out</button>
+        <button class="btn btn-danger ms-2" id="logout">Log out</button>
     </div>
 </nav>
 
@@ -137,7 +137,6 @@
         })
     })
 
-
     const viewAuctionDetails = (id) => {
         $.ajax({
             url: "auction/" + id,
@@ -150,19 +149,16 @@
         })
     }
 
-
     const addAuction = (picture, title, initialBid, id, bids) => {
         let newAuction = $("#auctionId").clone();
 
         newAuction.find("img").attr("src", picture);
         newAuction.find("h5").text(title)
 
-        console.log(bids)
-
         if(!bids.length > 0) {
-            newAuction.find("p").text(initialBid)
+            newAuction.find("p").text(initialBid + " BGN")
         } else {
-            newAuction.find("p").text(bids[bids.length - 1].bid)
+            newAuction.find("p").text(bids[bids.length - 1].bid + " BGN")
         }
 
 
@@ -185,12 +181,40 @@
                         addAuction(auction.picture, auction.title, auction.initialBid, auction.id, auction.bids)
                     }
                 })
-                console.log(data)
-
             }
         })
     }
 
+
+    $('#logout').on('click', (e) => {
+        e.preventDefault();
+
+        $.ajax({
+            url: "logout",
+            method: "POST",
+            complete: (data) => {
+                if(data.status === 418){
+                    alert("You are not logged in.");
+                }
+                window.location.href = "index.html";
+            }
+        });
+
+    });
+
+    const checkAuth = () => {
+        $.ajax({
+            url: "isAuthenticated",
+            method: "GET",
+            complete: function(data){
+                if(data.status === 401){
+                    window.location.href = "index.html";
+                }
+            }
+        });
+    }
+
+    checkAuth();
     loadAuctions();
 </script>
 </body>

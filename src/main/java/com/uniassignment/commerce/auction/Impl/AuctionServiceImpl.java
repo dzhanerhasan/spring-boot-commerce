@@ -3,6 +3,7 @@ package com.uniassignment.commerce.auction.Impl;
 import com.uniassignment.commerce.auction.Auction;
 import com.uniassignment.commerce.auction.AuctionRepository;
 import com.uniassignment.commerce.auction.AuctionService;
+import com.uniassignment.commerce.bid.Bid;
 import com.uniassignment.commerce.user.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import java.util.Optional;
 
 @Service
 public class AuctionServiceImpl implements AuctionService {
-
     private final AuctionRepository auctionRepository;
 
     public AuctionServiceImpl(AuctionRepository auctionRepository) {
@@ -54,12 +54,18 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public Auction closeAuction(Long id) {
-
+        // When a user closes an auction the highest bidder wins it, and the auction will show
+        // on "Won Auctions" page of the winner.
         Auction auction = auctionRepository.findById(id).get();
-        auction.setActive(false);
 
-        System.out.println(auction);
+        if(!auction.getBids().isEmpty()) {
+            Bid highestBid = auction.getBids().get(auction.getBids().size() - 1);
+            highestBid.setWinner(true);
+        }
+
+        auction.setActive(false);
 
         return auctionRepository.saveAndFlush(auction);
     }
+
 }

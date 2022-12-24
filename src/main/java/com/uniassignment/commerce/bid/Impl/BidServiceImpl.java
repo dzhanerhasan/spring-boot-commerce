@@ -35,4 +35,10 @@ public class BidServiceImpl implements BidService {
 
         return false;
     }
+
+    @Override
+    public List<Auction> retrieveWonAuctions(User user) {
+        List<Bid> wonAuctions = user.getBids().stream().filter(Bid::getWinner).toList();
+        return wonAuctions.stream().map(Bid::getAuction).toList();
+    }
 }

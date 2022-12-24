@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/auction")
 public class AuctionController {
-    private AuctionService auctionService;
+    private final AuctionService auctionService;
 
     public AuctionController(AuctionService auctionService) {
         this.auctionService = auctionService;

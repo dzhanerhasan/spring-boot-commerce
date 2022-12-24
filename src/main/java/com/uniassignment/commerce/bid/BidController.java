@@ -4,12 +4,11 @@ import com.uniassignment.commerce.auction.Auction;
 import com.uniassignment.commerce.auction.AuctionService;
 import com.uniassignment.commerce.user.User;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/bid")
@@ -20,6 +19,20 @@ public class BidController {
     public BidController(BidService bidService, AuctionService auctionService) {
         this.bidService = bidService;
         this.auctionService = auctionService;
+    }
+
+    @GetMapping("/{id}")
+    public List<Bid> bidsOnAuction(@PathVariable Long id) {
+        Auction auction = auctionService.retrieveAuction(id);
+        return auction.getBids();
+    }
+
+    @GetMapping("/won")
+    public List<Auction> retrieveWonAuctions(HttpSession session) {
+
+        User user = (User)session.getAttribute("loggedUser");
+
+        return bidService.retrieveWonAuctions(user);
     }
 
     @PostMapping("/create")

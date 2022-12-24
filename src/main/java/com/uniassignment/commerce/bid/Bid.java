@@ -25,7 +25,6 @@ public class Bid implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "auction_id", nullable = false)
-    @JsonBackReference
     private Auction auction;
 
     private Boolean winner = false;

@@ -96,9 +96,15 @@
                 Categories
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><a class="dropdown-item" href="#">All</a></li>
+                <li><a class="dropdown-item" href="#">Home</a></li>
+                <li><a class="dropdown-item" href="#">Automobiles</a></li>
+                <li><a class="dropdown-item" href="#">Toys</a></li>
+                <li><a class="dropdown-item" href="#">Clothes</a></li>
+                <li><a class="dropdown-item" href="#">Animals</a></li>
+                <li><a class="dropdown-item" href="#">Work</a></li>
+                <li><a class="dropdown-item" href="#">Sport</a></li>
+                <li><a class="dropdown-item" href="#">Technology</a></li>
             </ul>
         </div>
         <button class="btn btn-danger ms-2" id="logout">Log out</button>
@@ -121,7 +127,7 @@
         </div>
 
         <img src="" alt="Auction Picture" id="auction-picture"
-             class="img-fluid img-thumbnail col">
+             class="img-fluid img-thumbnail col" style="max-height: 73vh">
 
         <div class="card col ms-3">
             <div class="row mt-3">
@@ -155,6 +161,27 @@
 </div>
 
 <script>
+    $("#auction-form").submit((e) => {
+        e.preventDefault();
+
+        $.ajax({
+            url: "auction/create",
+            method: "POST",
+            data: {
+                title: $("#title").val(),
+                initialBid: $("#initialBid").val(),
+                description: $("#description").val(),
+                category: $("#category").val(),
+                pictureUrl: $("#pictureUrl").val()
+            },
+            success: (data) => {
+                window.location.replace("dashboard.html");
+            },
+            fail: () => {
+                alert("There was an error while creating the auction, try again!")
+            }
+        })
+    })
 
     // Get the id of the auction from the url to get the data.
     const getParamsFromUrl = new URLSearchParams(window.location.search);
@@ -180,6 +207,7 @@
             url: "auction/" + param,
             method: "GET",
             success: (data) => {
+
                 document.title = data.title;
                 const auctionCopy = $("#auction")
                 let auction = auctionCopy.clone();
@@ -188,12 +216,25 @@
                 auction.find("#auction-title").text(data.title)
                 auction.find("img").attr("src", data.picture);
 
-                if(!data.bids.length > 0) {
-                    auction.find("#current-bid").text("Current bid: " + data.initialBid + " BGN")
-                } else {
-                    auction.find("#current-bid").text("Current bid: "
-                        + data.bids[data.bids.length - 1].bid + " BGN by " + data.user.username)
-                }
+                $.ajax({
+                    url: "bid/" + data.id,
+                    method: "GET",
+                    success: (bid) => {
+                        console.log(bid)
+                        if(!bid.length > 0) {
+                            auction.find("#current-bid").text("Current bid: " + data.initialBid + " BGN")
+                        } else {
+                            $.ajax({
+                                url: "/requestUser",
+                                method: "GET",
+                                success: (name) => {
+                                    auction.find("#current-bid").text("Current bid: "
+                                        + bid[bid.length - 1].bid + " BGN by " + name)
+                                }
+                            })
+                        }
+                    }
+                })
 
                 auction.find("#close-auction").click(() => {
                     closeAuction(data);
@@ -212,7 +253,7 @@
                         if(username !== data.user.username) {
                             // Only the user who created the auction can close it (when auction is closed the highest bidder wins
                             // the auction)
-                            closeAuction.hide();
+                            $("#close-auction").hide();
                         } else {
                             // Users can't bid on their own auctions so the form is hidden.
                             $("#bid-form").hide();
@@ -270,8 +311,6 @@
                 });
 
                 auction.show();
-
-                console.log(data)
             }
         });
     }

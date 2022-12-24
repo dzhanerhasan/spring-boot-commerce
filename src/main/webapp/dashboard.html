@@ -90,9 +90,15 @@
                 Categories
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><a class="dropdown-item" href="#">All</a></li>
+                <li><a class="dropdown-item" href="#">Home</a></li>
+                <li><a class="dropdown-item" href="#">Automobiles</a></li>
+                <li><a class="dropdown-item" href="#">Toys</a></li>
+                <li><a class="dropdown-item" href="#">Clothes</a></li>
+                <li><a class="dropdown-item" href="#">Animals</a></li>
+                <li><a class="dropdown-item" href="#">Work</a></li>
+                <li><a class="dropdown-item" href="#">Sport</a></li>
+                <li><a class="dropdown-item" href="#">Technology</a></li>
             </ul>
         </div>
         <button class="btn btn-danger ms-2" id="logout">Log out</button>
@@ -102,8 +108,8 @@
 <div class="container">
     <div class="row" id="auction-list">
         <div class="card m-3" id="auctionId" style="width: 18rem; display: none">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
+            <img src="..." class="img-fluid rounded mt-3" style="height: 25vh" alt="...">
+            <div class="card-body align-bottom">
                 <h5 class="card-title">Card title</h5>
                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 <button class="btn btn-primary">View Details</button>
@@ -149,18 +155,25 @@
         })
     }
 
-    const addAuction = (picture, title, initialBid, id, bids) => {
+    const addAuction = (picture, title, initialBid, id) => {
         let newAuction = $("#auctionId").clone();
 
         newAuction.find("img").attr("src", picture);
         newAuction.find("h5").text(title)
 
-        if(!bids.length > 0) {
-            newAuction.find("p").text(initialBid + " BGN")
-        } else {
-            newAuction.find("p").text(bids[bids.length - 1].bid + " BGN")
-        }
-
+        // Get highest or initial bid.
+        $.ajax({
+            url: "/bid/" + id,
+            method: "GET",
+            success: (bid) => {
+                console.log(bid)
+                if(!bid.length > 0) {
+                    newAuction.find("p").text(initialBid + " BGN")
+                } else {
+                    newAuction.find("p").text(bid[bid.length - 1].bid + " BGN")
+                }
+            }
+        })
 
         newAuction.attr('id', '');
         newAuction.find("button").click(() => {
@@ -178,7 +191,7 @@
             success: (data) => {
                 data.forEach((auction) => {
                     if(auction.active) {
-                        addAuction(auction.picture, auction.title, auction.initialBid, auction.id, auction.bids)
+                        addAuction(auction.picture, auction.title, auction.initialBid, auction.id)
                     }
                 })
             }

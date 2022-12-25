@@ -90,15 +90,14 @@
                 Categories
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" href="#">All</a></li>
-                <li><a class="dropdown-item" href="#">Home</a></li>
-                <li><a class="dropdown-item" href="#">Automobiles</a></li>
-                <li><a class="dropdown-item" href="#">Toys</a></li>
-                <li><a class="dropdown-item" href="#">Clothes</a></li>
-                <li><a class="dropdown-item" href="#">Animals</a></li>
-                <li><a class="dropdown-item" href="#">Work</a></li>
-                <li><a class="dropdown-item" href="#">Sport</a></li>
-                <li><a class="dropdown-item" href="#">Technology</a></li>
+                <li><span class="dropdown-item">Home</span></li>
+                <li><span class="dropdown-item">Automobiles</span></li>
+                <li><span class="dropdown-item">Toys</span></li>
+                <li><span class="dropdown-item">Clothes</span></li>
+                <li><span class="dropdown-item">Animals</span></li>
+                <li><span class="dropdown-item">Work</span></li>
+                <li><span class="dropdown-item">Sport</span></li>
+                <li><span class="dropdown-item">Technology</span></li>
             </ul>
         </div>
         <button class="btn btn-danger ms-2" id="logout">Log out</button>
@@ -107,7 +106,7 @@
 
 <div class="container">
     <div class="row" id="auction-list">
-        <div class="card m-3" id="auctionId" style="width: 18rem; display: none">
+        <div class="card m-3" id="auctionId" style="width: 20rem; display: none">
             <img src="..." class="img-fluid rounded mt-3" style="height: 25vh" alt="...">
             <div class="card-body align-bottom">
                 <h5 class="card-title">Card title</h5>
@@ -120,6 +119,24 @@
 </div>
 
 <script>
+
+    const getAuctions = (auctions) => {
+        auctions.forEach((auction) => {
+            addAuction(auction.picture, auction.title, auction.initialBid, auction.id)
+        })
+    }
+
+    $(".dropdown-item").on("click", function() {
+        const category = $(this).text();
+
+        $.ajax({
+            url: "auction/category" + category,
+            method: "GET",
+            success: (sortedData) => {
+                getAuctions(sortedData);
+            }
+        })
+    })
 
     $("#auction-form").submit((e) => {
         e.preventDefault();
@@ -189,13 +206,9 @@
             url: "/auction/all",
             method: "GET",
             success: (data) => {
-                data.forEach((auction) => {
-                    if(auction.active) {
-                        addAuction(auction.picture, auction.title, auction.initialBid, auction.id)
-                    }
-                })
+                getAuctions(data);
             }
-        })
+        });
     }
 
 

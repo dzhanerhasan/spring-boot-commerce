@@ -41,4 +41,10 @@ public class BidServiceImpl implements BidService {
         List<Bid> wonAuctions = user.getBids().stream().filter(Bid::getWinner).toList();
         return wonAuctions.stream().map(Bid::getAuction).toList();
     }
+
+    @Override
+    public String getBidUsername(Long id) {
+        Bid bid = bidRepository.findById(id).get();
+        return bid.getUser().getUsername();
+    }
 }

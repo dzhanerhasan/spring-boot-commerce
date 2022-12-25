@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface AuctionRepository extends JpaRepository<Auction, Long> {
+    List<Auction> findAllByActive(Boolean active);
+    List<Auction> findAllByCategoryAndActive(String category, Boolean active);
 }

@@ -21,6 +21,11 @@ public class AuctionController {
         return auctionService.getAllAuctions();
     }
 
+    @GetMapping("/category/{category}")
+    public List<Auction> retrieveCategoryAuctions(@PathVariable String category) {
+        return auctionService.getCategoryAuctions(category);
+    }
+
     @PostMapping("/create")
     public Auction createAuction(@RequestParam String title,
                                  @RequestParam BigDecimal initialBid,

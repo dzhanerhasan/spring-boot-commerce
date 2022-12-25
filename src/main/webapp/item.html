@@ -220,16 +220,20 @@
                     url: "bid/" + data.id,
                     method: "GET",
                     success: (bid) => {
-                        console.log(bid)
+
+                        // If there is no bid on the auction yet, show the initial bid only.
+                        // Else show the highest bidder user's username alongside the bid.
                         if(!bid.length > 0) {
                             auction.find("#current-bid").text("Current bid: " + data.initialBid + " BGN")
                         } else {
+                            const highestBid = bid[bid.length - 1];
+
                             $.ajax({
-                                url: "/requestUser",
+                                url: "/bid/bidByUser/" + highestBid.id,
                                 method: "GET",
                                 success: (name) => {
                                     auction.find("#current-bid").text("Current bid: "
-                                        + bid[bid.length - 1].bid + " BGN by " + name)
+                                        + highestBid.bid + " BGN by " + name)
                                 }
                             })
                         }

@@ -15,4 +15,6 @@ public interface AuctionService {
     Auction retrieveAuction(Long id);
 
     Auction closeAuction(Long id);
+
+    List<Auction> getCategoryAuctions(String category);
 }

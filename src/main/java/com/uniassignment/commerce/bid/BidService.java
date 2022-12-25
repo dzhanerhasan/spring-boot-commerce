@@ -10,4 +10,6 @@ public interface BidService {
     Boolean createBid(BigDecimal value, User user, Auction auction);
 
     List<Auction> retrieveWonAuctions(User user);
+
+    String getBidUsername(Long id);
 }

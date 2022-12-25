@@ -5,13 +5,9 @@ import com.uniassignment.commerce.auction.AuctionRepository;
 import com.uniassignment.commerce.auction.AuctionService;
 import com.uniassignment.commerce.bid.Bid;
 import com.uniassignment.commerce.user.User;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuctionServiceImpl implements AuctionService {
@@ -23,7 +19,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public List<Auction> getAllAuctions() {
-        return auctionRepository.findAll();
+        return auctionRepository.findAllByActive(true);
     }
 
     @Override
@@ -66,6 +62,11 @@ public class AuctionServiceImpl implements AuctionService {
         auction.setActive(false);
 
         return auctionRepository.saveAndFlush(auction);
+    }
+
+    @Override
+    public List<Auction> getCategoryAuctions(String category) {
+        return auctionRepository.findAllByCategoryAndActive(category, true);
     }
 
 }

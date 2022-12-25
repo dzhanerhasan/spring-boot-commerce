@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/bid")
@@ -44,5 +43,10 @@ public class BidController {
         Auction auction = auctionService.retrieveAuction(auctionId);
 
         return bidService.createBid(bidValue, user, auction);
+    }
+
+    @GetMapping("/bidByUser/{id}")
+    public String getBidUsername(@PathVariable Long id) {
+        return bidService.getBidUsername(id);
     }
 }

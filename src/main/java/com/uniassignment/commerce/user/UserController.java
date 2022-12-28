@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.math.BigDecimal;
+
 @RestController
 public class UserController {
     private UserService userService;
@@ -78,5 +80,14 @@ public class UserController {
         }else {
             return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
         }
+    }
+
+
+    @GetMapping("/getBalance")
+    public BigDecimal getUserBalance(HttpSession session) {
+
+        User user = (User)session.getAttribute("loggedUser");
+
+        return userService.getUserBalance(user);
     }
 }

@@ -5,6 +5,7 @@ import com.uniassignment.commerce.auction.AuctionRepository;
 import com.uniassignment.commerce.auction.AuctionService;
 import com.uniassignment.commerce.bid.Bid;
 import com.uniassignment.commerce.user.User;
+import com.uniassignment.commerce.user.UserRepository;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,9 +13,11 @@ import java.util.List;
 @Service
 public class AuctionServiceImpl implements AuctionService {
     private final AuctionRepository auctionRepository;
+    private final UserRepository userRepository;
 
-    public AuctionServiceImpl(AuctionRepository auctionRepository) {
+    public AuctionServiceImpl(AuctionRepository auctionRepository, UserRepository userRepository) {
         this.auctionRepository = auctionRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -50,13 +53,21 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public Auction closeAuction(Long id) {
-        // When a user closes an auction the highest bidder wins it, and the auction will show
-        // on "Won Auctions" page of the winner. If there are no bids the auction gets deleted from the DB.
+        // When a user closes an auction:
+        // - The highest bidder wins the auction and the user who posted the auctions gets the money.
+        // - The winner can view the auction in their "Won Auctions" page and the seller can view the profits in the
+        // "Balance" page.
+        // - If there is no bid when the auction gets closed, the auction gets deleted.
         Auction auction = auctionRepository.findById(id).get();
 
         if(!auction.getBids().isEmpty()) {
             Bid highestBid = auction.getBids().get(auction.getBids().size() - 1);
             highestBid.setWinner(true);
+
+            User user = auction.getUser();
+            user.setBalance(user.getBalance().add(highestBid.getBid()));
+            userRepository.saveAndFlush(user);
+
         } else {
             auctionRepository.delete(auction);
             return null;

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.math.BigDecimal;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -65,5 +67,11 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public BigDecimal getUserBalance(User user) {
 
+        // user.getBalance() returns wrong values, so I get the data from the DB.
+
+        return userRepository.findById(user.getId()).get().getBalance();
+    }
 }

@@ -7,6 +7,8 @@ import com.uniassignment.commerce.bid.Bid;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Set;
 
 @Entity
@@ -23,6 +25,9 @@ public class User implements Serializable {
     private String email;
     @Column(length = 72, nullable = false)
     private String password;
+    @Column(precision = 10, scale = 2, nullable = false)
+    private BigDecimal balance = BigDecimal.valueOf(0.00);
+
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name="user_id"),
@@ -89,6 +94,14 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     public Set<Role> getRoles() {

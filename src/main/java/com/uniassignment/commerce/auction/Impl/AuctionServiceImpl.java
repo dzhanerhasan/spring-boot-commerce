@@ -51,12 +51,15 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Auction closeAuction(Long id) {
         // When a user closes an auction the highest bidder wins it, and the auction will show
-        // on "Won Auctions" page of the winner.
+        // on "Won Auctions" page of the winner. If there are no bids the auction gets deleted from the DB.
         Auction auction = auctionRepository.findById(id).get();
 
         if(!auction.getBids().isEmpty()) {
             Bid highestBid = auction.getBids().get(auction.getBids().size() - 1);
             highestBid.setWinner(true);
+        } else {
+            auctionRepository.delete(auction);
+            return null;
         }
 
         auction.setActive(false);

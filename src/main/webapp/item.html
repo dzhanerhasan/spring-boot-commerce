@@ -233,7 +233,6 @@
                 }
                 auction.find("#auction-description").text(auctionDescription);
 
-
                 $.ajax({
                     url: "requestUser",
                     method: "GET",
@@ -298,6 +297,13 @@
 
                 });
 
+                // Users can't bid on won auctions.
+                $(document).ready(() => {
+                    if(!data.active) {
+                        $("#bid-form").hide();
+                    }
+                });
+
                 auction.show();
             }
         });
@@ -312,6 +318,12 @@
                     window.location.href = "index.html";
                 }
 
+                $.ajax({
+                    url: "auction/" + param,
+                    method: "GET",
+                    success: (data) => {
+                    }
+                })
             }
         });
     }

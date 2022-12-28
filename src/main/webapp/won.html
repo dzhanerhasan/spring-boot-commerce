@@ -155,13 +155,13 @@
         let defaultDescription = "No description..."
 
         wonAuction.find("img").attr("src", picture);
-        wonAuction.find("h5").text(title);
+        wonAuction.find("#won-title").text(title);
 
         if(description) {
             defaultDescription = description;
         }
 
-        wonAuction.find("#won-title").text(defaultDescription);
+        wonAuction.find("#won-description").text(defaultDescription);
 
         $.ajax({
             url: "bid/" + id,

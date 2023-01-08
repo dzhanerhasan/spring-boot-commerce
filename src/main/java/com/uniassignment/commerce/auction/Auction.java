@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.uniassignment.commerce.bid.Bid;
+import com.uniassignment.commerce.comment.Comment;
 import com.uniassignment.commerce.user.User;
 import jakarta.persistence.*;
 
@@ -31,6 +32,9 @@ public class Auction implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "auction")
     @JsonIgnore
     private List<Bid> bids;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "auction")
+    @JsonIgnore
+    private List<Comment> comments;
 
     public Auction() {
 

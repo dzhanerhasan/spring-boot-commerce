@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -128,10 +128,12 @@
             </div>
             <hr>
             <div id="comments" class="overflow-scroll h-75" style="max-height: 50vh; min-height: 50vh;">
-
+                <div id="user-comment" style="display: none">
+                    <strong><span id="change-user">Dzhaner:</span></strong>
+                    <span id="change-comment">Comment</span></div>
             </div>
             <hr>
-            <form class="w-100 h-25 mb-3">
+            <form class="w-100 h-25 mb-3" id="comment-form">
                     <input type="text" class="form-control h-50 mb-2" id="comment" placeholder="Post a comment">
                     <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -184,6 +186,25 @@
                 alert("Operation failed!")
             }
         })
+    }
+
+    function addComment(comment) {
+
+        $.ajax({
+            url: "comment/user/" + comment.id,
+            method: "GET",
+            success: (data) => {
+                newComment.find("#change-user").text(data + ": ")
+            }
+        })
+
+        let newComment = $("#user-comment").clone();
+
+        newComment.find("#change-comment").text(comment.comment)
+
+        $("#comments").prepend(newComment)
+
+        newComment.show();
     }
 
     const loadAuctionDetails = () => {
@@ -256,6 +277,7 @@
                 $("#bid-form").submit((e) => {
                     e.preventDefault();
                     let bidValue = $("#bid-value");
+
                     $.ajax({
                         url: "bid/create",
                         method: "POST",
@@ -297,10 +319,42 @@
 
                 });
 
-                // Users can't bid on won auctions.
+                // Comment functionality on auctions.
+
+                $.ajax({
+                    url: "comment/" + param,
+                    method: "GET",
+                    success: (comments) => {
+                        comments.forEach((comment) => {
+                            addComment(comment);
+                        })
+                    }
+                })
+
+                $("#comment-form").submit((e) => {
+                    e.preventDefault();
+                    let comment = $("#comment").val()
+
+                    $.ajax({
+                        url: "comment/create",
+                        method: "POST",
+                        data: {
+                            auctionId: param,
+                            comment: comment,
+                        },
+                        success: (data) => {
+                            addComment(data)
+                            $("#comment").val("");
+                        }
+                    })
+                })
+
+                // Users can't comment or bid on closed auctions.
                 $(document).ready(() => {
                     if(!data.active) {
                         $("#bid-form").hide();
+                        $("#comment-form").hide();
+
                     }
                 });
 

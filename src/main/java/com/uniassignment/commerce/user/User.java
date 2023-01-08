@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.uniassignment.commerce.auction.Auction;
 import com.uniassignment.commerce.bid.Bid;
+import com.uniassignment.commerce.comment.Comment;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -41,6 +42,10 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     @JsonManagedReference
     private Set<Bid> bids;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Set<Comment> comments;
     public User() {
     }
 
@@ -126,6 +131,14 @@ public class User implements Serializable {
 
     public void setBids(Set<Bid> bids) {
         this.bids = bids;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override
